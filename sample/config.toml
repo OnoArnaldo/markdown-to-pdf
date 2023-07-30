@@ -1,0 +1,79 @@
+######################################
+### FONTS
+######################################
+[[fonts]]
+name = "UbuntuMono"
+regular = "./fonts/UbuntuMono/UbuntuMono-Regular.ttf"
+bold = "./fonts/UbuntuMono/UbuntuMono-Bold.ttf"
+italic = "./fonts/UbuntuMono/UbuntuMono-Italic.ttf"
+bold_italic = "./fonts/UbuntuMono/UbuntuMono-BoldItalic.ttf"
+
+
+######################################
+### STYLES
+######################################
+# check ParagraphStyle in reportlab/lib/styles.py
+# use lower_with_underscores style
+[[styles]]
+name = "Doc Title"
+font_name = "UbuntuMono-Bold"
+font_size = 16
+space_before = 0
+space_after = 20
+alignment = "TA_CENTER"
+
+[[styles]]
+name = "Doc Subtitle"
+font_name = "UbuntuMono-Bold"
+font_size = 12
+space_before = 0
+space_after = 10
+alignment = "TA_LEFT"
+
+[[styles]]
+name = "Doc Body"
+font_name = "UbuntuMono"
+
+
+######################################
+### REPORTS
+######################################
+# the order matters here, go from more to less specific rules
+
+# TITLLE
+[[reports]]
+style = "Doc Title"
+
+[[reports.attributes]]
+name = "id"
+value = "title"
+
+# SUBTITLLE
+[[reports]]
+style = "Doc Subtitle"
+
+[[reports.attributes]]
+name = "id"
+value = "subtitle"
+
+# SUBTITLLE - H2
+[[reports]]
+style = "Doc Subtitle"
+
+[[reports.attributes]]
+name = "tag"
+value = "h2"
+
+
+######################################
+### DEFAULTS
+######################################
+[defaults.report]
+style = "Doc Body"
+
+[defaults.style]
+font_size = 10
+alignment = "TA_JUSTIFY"
+allow_widows = 0
+space_before = 10
+space_after = 10

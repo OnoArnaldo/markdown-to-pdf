@@ -1,0 +1,35 @@
+[project]
+name = "markdown-to-pdf"
+version = "2023.07.30.0001"
+description = "Convert markdown document to pdf"
+readme = "README.md"
+requires-python = ">=3.11"
+license = {file = "LICENSE"}
+keywords = ["markdown", "pdf", "development"]
+authors = [{name = "Arnaldo Ono", email = "git@onoarnaldo.com" }]
+maintainers = [{name = "Arnaldo Ono", email = "git@onoarnaldo.com" }]
+
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: Build Tools",
+  "License :: OSI Approved :: MIT License",
+  "Programming Language :: Python :: 3.11",
+]
+
+dependencies = [
+  "html-to-json @ git+https://github.com/OnoArnaldo/py-html-to-json.git@0862bd811e12a899c5301555ce6f3874ba507c12",
+  "Jinja2==3.1.2",
+  "reportlab==4.0.4",
+"Markdown==3.4.4"
+]
+
+[project.optional-dependencies]
+test = ["pytest", "coverage"]
+
+[project.urls]
+"Homepage" = "https://github.com/OnoArnaldo/markdown-to-pdf"
+"Source" = "https://github.com/OnoArnaldo/markdown-to-pdf"
+
+#[project.scripts]
+#sample = "sample:main"

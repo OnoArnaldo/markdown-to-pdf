@@ -1,0 +1,122 @@
+######################################
+### FONTS
+######################################
+[[fonts]]
+name = "Doc1Font"
+regular = "./tests/fonts/OpenSans/OpenSans-Regular.ttf"
+bold = "./tests/fonts/OpenSans/OpenSans-Bold.ttf"
+italic = "./tests/fonts/OpenSans/OpenSans-Italic.ttf"
+bold_italic = "./tests/fonts/OpenSans/OpenSans-BoldItalic.ttf"
+
+[[fonts]]
+name = "Doc2Font"
+regular = "./tests/fonts/UbuntuMono/UbuntuMono-Regular.ttf"
+bold = "./tests/fonts/UbuntuMono/UbuntuMono-Bold.ttf"
+italic = "./tests/fonts/UbuntuMono/UbuntuMono-Italic.ttf"
+bold_italic = "./tests/fonts/UbuntuMono/UbuntuMono-BoldItalic.ttf"
+
+
+######################################
+### STYLES
+######################################
+# check ParagraphStyle in reportlab/lib/styles.py
+# use lower_with_underscores style
+[[styles]]
+name = "Doc1 Title"
+font_name = "Doc1Font-Bold"
+font_size = 16
+space_before = 0
+space_after = 20
+alignment = "TA_LEFT"
+
+[[styles]]
+name = "Doc1 subtitle"
+font_name = "Doc1Font-Bold"
+font_size = 12
+space_before = 0
+space_after = 10
+alignment = "TA_LEFT"
+
+[[styles]]
+name = "Doc1 Body"
+font_name = "Doc1Font"
+#fontSize = 11
+#spaceBefore = 5
+#spaceAfter = 10
+#alignment = "TA_JUSTIFY"
+
+[[styles]]
+name = "Doc2 Title"
+font_name = "Doc2Font-Bold"
+font_size = 16
+space_before = 0
+space_after = 20
+alignment = "TA_LEFT"
+
+[[styles]]
+name = "Doc2 subtitle"
+font_name = "Doc2Font-BoldItalic"
+font_size = 12
+space_before = 0
+space_after = 10
+alignment = "TA_LEFT"
+
+[[styles]]
+name = "Doc2 Body"
+font_name = "Doc2Font"
+
+
+######################################
+### REPORTS
+######################################
+# the order matters here, go from more to less specific rules
+
+# TITLLE 2
+[[reports]]
+style = "Doc2 Title"
+
+[[reports.attributes]]
+name = "id"
+value = "title2"
+
+# SUBTITLLE 2
+[[reports]]
+style = "Doc2 subtitle"
+
+[[reports.attributes]]
+name = "id"
+value = "subtitle2"
+
+# TITLLE
+[[reports]]
+style = "Doc1 Title"
+
+[[reports.attributes]]
+name = "id"
+value = "title"
+
+# SUBTITLLE
+[[reports]]
+style = "Doc1 subtitle"
+
+[[reports.attributes]]
+name = "tag"
+value = "h2"
+
+[[reports.attributes]]
+name = "class"
+value = "subtitle"
+
+
+######################################
+### DEFAULTS
+######################################
+[defaults.report]
+style = "Doc1 Body"
+
+[defaults.style]
+font_size = 10
+alignment = "TA_JUSTIFY"
+allow_widows = 0
+space_before = 10
+space_after = 10
