@@ -15,7 +15,7 @@ pip install -r requirements.txt
 pip install .
 ```
 
-or from github:
+or from gitHub:
 ```shell
 pip install git+https://github.com/OnoArnaldo/markdown-to-pdf
 ```
@@ -52,7 +52,7 @@ flowchart
 The configuration file is divided in 4 sections:
 
 * Fonts: To add specific fonts to the document 
-    (example: some font you downloaded from google fonts).
+    (example: some font you downloaded from Google fonts).
 * Styles: Configure the styles than can be used in the document.
 * Reports: Definition of the style to be used based on the 
     combination of attributes.
@@ -155,21 +155,134 @@ space_after = 10
 
 ### Template
 
-The markdown file can start with key-value headers separated 
-to the content by a blank line.
+Simple example:
 
 ```markdown
 name= "The Name"
 company= "The Company"
 
-# Hello {{ name }} {: #title}
+# Hello {{ name }}
 
-## Hello company {{ company }} {: #subtitle}
+## Hello company {{ company }}
 
 Below is a list:
 
 * item 1
 * item 2
+```
+
+### Using headers
+
+The headers are key-value items in the beginning of the document, you have to add a blank line before the content.
+
+```markdown
+name: My Name
+company: My Company
+
+# {{ company }}
+
+## {{ name }}
+```
+
+
+### Adding attributes
+
+Adding in headers:
+
+```markdown
+# In headers {: #the-id .the-class .another-class custom="value" }
+```
+
+Adding to paragraphs:
+
+```markdown
+This is a paragraph.
+{: #the-id .the-class .another-class custom="value" }
+```
+
+Adding to list:
+
+```markdown
+* item-1
+* item-2
+* item-3
+{: #the-id .the-class .another-class custom="value" }
+```
+
+> Note that the attributes will be assigned to the `item-3` only
+
+
+For all the examples above, this will be the result:
+
+```json
+{
+  "id": "the-id",
+  "class": "the-class another-class",
+  "custom": "value"
+}
+```
+
+#### Special attributes
+
+Keep together: it will keep all the elements together, in the same page, plus the next element without the attribute.
+
+```markdown
+# The title {: .keep-together }
+
+The paragraph 1.
+{: .keep-together}
+
+The paragraph 2.
+```
+
+> In this example, the title and both paragraphs will stay together in the same page.
+
+Key value: it will treat the line as a key/value line, separated by `:`.
+
+```markdown
+paragraph key: paragraph value
+{: .key-value style="italic,bold,underscore"}
+
+* item key 1: item value 1
+* item key 2: item value 2
+* item key 3: item value 3
+{: .key-value}
+```
+
+> The default style is `bold`.
+
+> If you want to use `:` as part of the key or value, you will have to escape it with `&#58;`.
+
+
+## Add functions and constants
+
+> This is a workaround.
+
+```python
+from datetime import datetime
+from md2pdf import parser
+
+def today():
+    return datetime.utcnow().strftime('%d-%m-%Y')
+
+_original = parser.build_env
+
+def new_build_env(*args, **kwargs):
+    env = _original(*args, **kwargs)
+    env.globals['today'] = today
+    env.globals['company'] = 'My Company'
+
+    return env
+
+parser.build_env = new_build_env
+```
+
+In the markdown:
+
+```markdown
+# {{ company }}
+
+Today is {{ today() }}.
 ```
 
 
