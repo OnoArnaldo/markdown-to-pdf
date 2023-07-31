@@ -1,20 +1,20 @@
 import typing as _
-from pathlib import Path
 from hashlib import shake_128
+from pathlib import Path
 from pickle import dumps as pickle_dumps
 
-from reportlab.lib.units import mm
 from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER, TA_LEFT, TA_RIGHT
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle, StyleSheet1
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Flowable, ListFlowable, KeepTogether
-from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Flowable, ListFlowable, KeepTogether
 
-from .utils import SPACE
-from .parser import HtmlParser, MarkdownParser
-from .config import camel_case_dict
 from . import html_to_dict
+from .config import camel_case_dict
+from .parser import HtmlParser, MarkdownParser
+from .utils import SPACE
 
 if _.TYPE_CHECKING:  # pragma: no cover
     from .config import Config
@@ -57,6 +57,7 @@ class PdfGenerator:
 
     def build_keep_together(self, flowables: list[Flowable]) -> KeepTogether:
         return KeepTogether(flowables)
+
     # endregion
 
     # region ADDERS
@@ -159,6 +160,7 @@ class PdfGenerator:
         self.append_element(bullet_list, keep_together)
 
         return self
+
     # endregion
 
     def build(self, file_name: str | Path | Writable, *,
@@ -231,32 +233,44 @@ class Md2Pdf(PdfGenerator):
 
         return self
 
-    def _get_elem_attr(self, element: dict, name: str) -> str:
+    def _get_elem_attr(self, element: dict, name: str, default: _.Any = None) -> str:
         if name == 'tag':
             return element[name]
-        return element['attributes'].get(name, EMPTY)
+        return element['attributes'].get(name, default or EMPTY)
 
     def _find_report_config(self, element: dict) -> dict:
+        ret = None
+
         for report in self.config.reports:
             if all(self._get_elem_attr(element, a['name']) == a['value'] for a in report.attributes):
-                return report
+                ret = report
+                break
+
+        ret = dict(ret or self.config.defaults.report or {})
+
+        if 'attributes' in ret:
+            del ret['attributes']
+
+        return ret
+
+    def _find_report_classes(self, element: dict) -> list[str]:
+        return element.get('attributes', {}).get('class', '').split(' ')
 
     def build_from_data(self, data: dict) -> _.Self:
         for child in data.get('children', []):
             config = self._find_report_config(child)
+            classes = self._find_report_classes(child)
 
-            if config is None:
-                config = self.config.defaults.report
-
-            config = {} if config is None else dict(config)
-            if 'attributes' in config:
-                del config['attributes']
-
-            classes = child.get('attributes', {}).get('class', '').split(' ')
             if child.get('tag') in {f'h{i}' for i in range(1, 7)} | {'p'}:
-                self.append_paragraph(child.get('value', ''),
-                                      style=config.get('style'),
-                                      keep_together='keep-together' in classes)
+                if '3-columns' in classes:
+                    self.append_three_columns_paragraph(child.get('value', '').split('#'),
+                                                        size=int(self._get_elem_attr(child, 'size', 0)),
+                                                        style=config.get('style'),
+                                                        keep_together='keep-together' in classes)
+                else:
+                    self.append_paragraph(child.get('value', ''),
+                                          style=config.get('style'),
+                                          keep_together='keep-together' in classes)
 
             elif child.get('tag') in {'ul'}:
                 self.append_bullet_list(

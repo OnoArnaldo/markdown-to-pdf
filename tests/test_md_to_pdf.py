@@ -10,6 +10,9 @@ CONFIG_FILE = ROOT_DIR / 'config.toml'
 MD = """\
 # The title {: #title}
 
+left#center#right
+{: .3-columns size=73}
+
 ## The subtitle {: .subtitle}
 
 The paragraph:
@@ -66,8 +69,10 @@ def config() -> Config:
 def test_generate(config):
     doc = Md2Pdf().setup(config, ROOT_DIR / '..').build_from_md(MD)
 
+    space = '&nbsp;'
     assert doc.elements == [
         ExpectedParagraph('The title', 'Doc1 Title'),
+        ExpectedParagraph(f'left{space*29}center{space*29}right', 'Doc1 Body'),
         ExpectedParagraph('The subtitle', 'Doc1 subtitle'),
         ExpectedParagraph('The paragraph:', 'Doc1 Body'),
         ExpectedList(['item 1', 'item 2', 'item 3'], 'bullet'),
