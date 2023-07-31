@@ -2,7 +2,7 @@ import typing as _
 import markdown
 from jinja2 import Environment, BaseLoader, select_autoescape
 
-from .utils import AMPERSAND, today_long, append_space
+from .utils import AMPERSAND, today_long, append_space, underscore, italic, bold
 
 __all__ = ('HtmlParser', 'MarkdownParser')
 
@@ -21,6 +21,9 @@ def build_env(loader: BaseLoader) -> Environment:
                       lstrip_blocks=True)
     env.globals['today'] = today_long
     env.globals['space'] = append_space
+    env.globals['underscore'] = underscore
+    env.globals['italic'] = italic
+    env.globals['bold'] = bold
 
     return env
 

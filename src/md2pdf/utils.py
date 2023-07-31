@@ -25,3 +25,15 @@ def append_space(value: str) -> str:
     if value and not value.endswith(' '):
         return f'{value} '
     return value
+
+
+def underscore(value: str) -> str:
+    return f'&lt;u&gt;{value}&lt;/u&gt;'
+
+
+def italic(value: str) -> str:
+    return f'&lt;i&gt;{value}&lt;/i&gt;'
+
+
+def bold(value: str) -> str:
+    return f'&lt;b&gt;{value}&lt;/b&gt;'

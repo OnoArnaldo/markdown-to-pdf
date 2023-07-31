@@ -20,6 +20,9 @@ The paragraph:
 * item 1
 * item 2
 * item 3
+
+Formatted: {{ underscore("underscore") }}, {{ italic("italic") }}, 
+{{ bold("bold") }},  {{ bold(italic("bold-italic")) }}, {{ italic(bold("italic-bold")) }}
 """
 
 MD_WITH_KEEP_TOGETHER = """\
@@ -68,7 +71,6 @@ def config() -> Config:
 
 def test_generate(config):
     doc = Md2Pdf().setup(config, ROOT_DIR / '..').build_from_md(MD)
-
     space = '&nbsp;'
     assert doc.elements == [
         ExpectedParagraph('The title', 'Doc1 Title'),
@@ -76,6 +78,9 @@ def test_generate(config):
         ExpectedParagraph('The subtitle', 'Doc1 subtitle'),
         ExpectedParagraph('The paragraph:', 'Doc1 Body'),
         ExpectedList(['item 1', 'item 2', 'item 3'], 'bullet'),
+        ExpectedParagraph('Formatted: <u>underscore</u>, <i>italic</i>, '
+                          '<b>bold</b>, <b><i>bold-italic</i></b>, '
+                          '<i><b>italic-bold</b></i>', 'Doc1 Body')
     ]
 
 
