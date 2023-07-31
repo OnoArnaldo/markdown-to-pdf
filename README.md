@@ -47,6 +47,64 @@ flowchart
 
 ## Usage
 
+Generating the pdf file.
+
+```python
+from pathlib import Path
+
+from md2pdf import loads_config, load_config, Md2Pdf
+
+ROOT = Path(__file__).parent
+CONFIG_FILE = ROOT / 'config.toml'
+MD_FILE = ROOT / 'document.md'
+PDF_FILE = ROOT / 'document.pdf'
+
+# CONFIG FROM TEXT
+config = loads_config(CONFIG_FILE.read_text())
+
+# CONFIG FROM FILE
+with CONFIG_FILE.open() as f:
+    config = load_config(f)
+
+# FROM FILE
+(Md2Pdf()
+ .setup(config)
+ .build_from_file(MD_FILE)
+ .save(PDF_FILE,
+       title='Document 1',
+       name='My Name',
+       keywords=['Document', 'sample'],
+       version='abc'))
+
+# FROM MD TEXT
+text = MD_FILE.read_text()
+
+(Md2Pdf()
+ .setup(config)
+ .build_from_md(text)
+ .save(PDF_FILE,
+       title='Document 1',
+       name='My Name',
+       keywords=['Document', 'sample'],
+       version='abc'))
+
+# FROM HTML TEXT
+# using jinja2 syntax, without access to other files.
+text = (ROOT / 'document.html').read_text()
+
+(Md2Pdf()
+ .setup(config)
+ .build_from_html(text,  
+                  name="My Name", 
+                  company="My Company")
+ .save(PDF_FILE,
+       title='Document 1',
+       name='My Name',
+       keywords=['Document', 'sample'],
+       version='abc'))
+```
+
+
 ### Configuration
 
 The configuration file is divided in 4 sections:
