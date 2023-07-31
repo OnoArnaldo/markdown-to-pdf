@@ -1,6 +1,6 @@
 [project]
 name = "markdown-to-pdf"
-version = "2023.07.31.0002"
+version = "2023.07.31.0003"
 description = "Convert markdown document to pdf"
 readme = "README.md"
 requires-python = ">=3.11"

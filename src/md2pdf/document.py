@@ -20,6 +20,9 @@ if _.TYPE_CHECKING:  # pragma: no cover
     from .config import Config
 
 
+__all__ = (TA_JUSTIFY, TA_CENTER, TA_LEFT, TA_RIGHT, 'PdfGenerator', 'Md2Pdf')
+
+
 class Writable(_.Protocol):
     def write(self, data: bytes) -> None:  # pragma: no cover
         ...
@@ -256,6 +259,13 @@ class Md2Pdf(PdfGenerator):
     def _find_report_classes(self, element: dict) -> list[str]:
         return element.get('attributes', {}).get('class', '').split(' ')
 
+    def _make_key_value(self, value: str, classes: list[str]) -> str:
+        if 'key-value' in classes:
+            key, value = value.split(':') if ':' in value else (value, '')
+            return f'<b>{key}:</b>{value}'
+
+        return value
+
     def build_from_data(self, data: dict) -> _.Self:
         for child in data.get('children', []):
             config = self._find_report_config(child)
@@ -268,13 +278,21 @@ class Md2Pdf(PdfGenerator):
                                                         style=config.get('style'),
                                                         keep_together='keep-together' in classes)
                 else:
-                    self.append_paragraph(child.get('value', ''),
+                    value = self._make_key_value(child.get('value', ''), classes)
+                    self.append_paragraph(value,
                                           style=config.get('style'),
                                           keep_together='keep-together' in classes)
 
             elif child.get('tag') in {'ul'}:
+                list_classes = [c
+                                for list_child in child.get('children', [])
+                                for c in self._find_report_classes(list_child)]
+
+                values = [self._make_key_value(c.get('value', ''), list_classes)
+                          for c in child.get('children', [])]
+
                 self.append_bullet_list(
-                    [c.get('value', '') for c in child.get('children', [])],
+                    values,
                     style=config.get('style'),
                     keep_together='keep-together' in classes
                 )

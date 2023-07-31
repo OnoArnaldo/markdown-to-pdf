@@ -1,8 +1,10 @@
-import pytest
 from pathlib import Path
+
+import pytest
 from reportlab.platypus import Paragraph, ListFlowable, KeepTogether
-from md2pdf.document import Md2Pdf
+
 from md2pdf.config import loads_config, Config
+from md2pdf.document import Md2Pdf
 
 ROOT_DIR = Path(__file__).parent
 CONFIG_FILE = ROOT_DIR / 'config.toml'
@@ -23,6 +25,14 @@ The paragraph:
 
 Formatted: {{ underscore("underscore") }}, {{ italic("italic") }}, 
 {{ bold("bold") }},  {{ bold(italic("bold-italic")) }}, {{ italic(bold("italic-bold")) }}
+
+key: value
+{: .key-value}
+
+* item1: value1
+* item2: value2
+* item3: value3
+{: .key-value}
 """
 
 MD_WITH_KEEP_TOGETHER = """\
@@ -74,13 +84,16 @@ def test_generate(config):
     space = '&nbsp;'
     assert doc.elements == [
         ExpectedParagraph('The title', 'Doc1 Title'),
-        ExpectedParagraph(f'left{space*29}center{space*29}right', 'Doc1 Body'),
+        ExpectedParagraph(f'left{space * 29}center{space * 29}right', 'Doc1 Body'),
         ExpectedParagraph('The subtitle', 'Doc1 subtitle'),
         ExpectedParagraph('The paragraph:', 'Doc1 Body'),
         ExpectedList(['item 1', 'item 2', 'item 3'], 'bullet'),
         ExpectedParagraph('Formatted: <u>underscore</u>, <i>italic</i>, '
                           '<b>bold</b>, <b><i>bold-italic</i></b>, '
-                          '<i><b>italic-bold</b></i>', 'Doc1 Body')
+                          '<i><b>italic-bold</b></i>', 'Doc1 Body'),
+        ExpectedParagraph('<b>key:</b> value', 'Doc1 Body'),
+        ExpectedList(['<b>item1:</b> value1', '<b>item2:</b> value2', '<b>item3:</b> value3'],
+                     'bullet')
     ]
 
 
