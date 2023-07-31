@@ -259,10 +259,29 @@ class Md2Pdf(PdfGenerator):
     def _find_report_classes(self, element: dict) -> list[str]:
         return element.get('attributes', {}).get('class', '').split(' ')
 
-    def _make_key_value(self, value: str, classes: list[str]) -> str:
+    def _make_key_styles(self, key_style: str) -> list[str]:
+        ret = []
+        for k in key_style.split(','):
+            match k:
+                case 'bold':
+                    ret.append('b')
+                case 'italic':
+                    ret.append('i')
+                case 'underscore':
+                    ret.append('u')
+                case _:
+                    print(f'ERROR: In {key_style!r}, the key {k!r} is invalid.')
+        return ret
+
+    def _make_key_value(self, value: str, classes: list[str], key_style: str = None) -> str:
         if 'key-value' in classes:
             key, value = value.split(':') if ':' in value else (value, '')
-            return f'<b>{key}:</b>{value}'
+
+            key = f'{key}:'
+            for s in self._make_key_styles(key_style or 'bold'):
+                key = f'<{s}>{key}</{s}>'
+
+            return f'{key}{value}'
 
         return value
 
@@ -278,17 +297,22 @@ class Md2Pdf(PdfGenerator):
                                                         style=config.get('style'),
                                                         keep_together='keep-together' in classes)
                 else:
-                    value = self._make_key_value(child.get('value', ''), classes)
+                    key_styles = child.get('attributes', {}).get('style', '')
+                    value = self._make_key_value(child.get('value', ''), classes, key_styles)
+
                     self.append_paragraph(value,
                                           style=config.get('style'),
                                           keep_together='keep-together' in classes)
 
             elif child.get('tag') in {'ul'}:
-                list_classes = [c
-                                for list_child in child.get('children', [])
-                                for c in self._find_report_classes(list_child)]
+                if len(items := child.get('children', [])):
+                    list_classes = self._find_report_classes(items[-1])
+                    key_styles = items[-1].get('attributes', {}).get('style', '')
+                else:
+                    list_classes = []
+                    key_styles = ''
 
-                values = [self._make_key_value(c.get('value', ''), list_classes)
+                values = [self._make_key_value(c.get('value', ''), list_classes, key_styles)
                           for c in child.get('children', [])]
 
                 self.append_bullet_list(

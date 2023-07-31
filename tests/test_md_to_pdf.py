@@ -27,7 +27,7 @@ Formatted: {{ underscore("underscore") }}, {{ italic("italic") }},
 {{ bold("bold") }},  {{ bold(italic("bold-italic")) }}, {{ italic(bold("italic-bold")) }}
 
 key: value
-{: .key-value}
+{: .key-value style="italic,bold,underscore" }
 
 * item1: value1
 * item2: value2
@@ -56,6 +56,8 @@ class ExpectedParagraph:
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Paragraph):
+            # if not (other.text == self.text and other.style.name == self.style):
+            #     print(f'|| {other.text} != {self.text}')
             return other.text == self.text and other.style.name == self.style
 
         return False
@@ -91,7 +93,7 @@ def test_generate(config):
         ExpectedParagraph('Formatted: <u>underscore</u>, <i>italic</i>, '
                           '<b>bold</b>, <b><i>bold-italic</i></b>, '
                           '<i><b>italic-bold</b></i>', 'Doc1 Body'),
-        ExpectedParagraph('<b>key:</b> value', 'Doc1 Body'),
+        ExpectedParagraph('<u><b><i>key:</i></b></u> value', 'Doc1 Body'),
         ExpectedList(['<b>item1:</b> value1', '<b>item2:</b> value2', '<b>item3:</b> value3'],
                      'bullet')
     ]

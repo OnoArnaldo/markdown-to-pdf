@@ -25,7 +25,7 @@ Or you can use key-value class (the key will be bold and the value will be norma
 Paragraphs can be set with key-value too.
 
 paragraph key: paragraph value
-{: .key-value}
+{: .key-value style="italic"}
 
 ## Keep this title together with the next paragraph {:  .keep-together}
 
