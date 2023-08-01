@@ -229,7 +229,7 @@ Below is a list:
 * item 2
 ```
 
-### Using headers
+#### Using headers
 
 The headers are key-value items in the beginning of the document, you have to add a blank line before the content.
 
@@ -243,7 +243,7 @@ company: My Company
 ```
 
 
-### Adding attributes
+#### Adding attributes
 
 Adding in headers:
 
@@ -280,7 +280,7 @@ For all the examples above, this will be the result:
 }
 ```
 
-#### Special attributes
+##### Special attributes
 
 Keep together: it will keep all the elements together, in the same page, plus the next element without the attribute.
 
@@ -312,7 +312,18 @@ paragraph key: paragraph value
 > If you want to use `:` as part of the key or value, you will have to escape it with `&#58;`.
 
 
-## Add functions and constants
+#### Functions and constants
+
+##### Special functions
+
+```markdown
+Change style in the middle of the paragraph.
+Some examples: {{ underscore("aaaa") }}, {{ italic("bbbb") }}, {{ bold("cccc") }}, dddd
+They can be combined: {{ underscore(italic(bold("eeee"))) }}, ffff
+```
+
+
+##### Add functions and constants
 
 > This is a workaround.
 
