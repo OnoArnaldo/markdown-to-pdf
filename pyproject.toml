@@ -21,7 +21,7 @@ dependencies = [
   "html-to-json @ git+https://github.com/OnoArnaldo/py-html-to-json.git@0862bd811e12a899c5301555ce6f3874ba507c12",
   "Jinja2==3.1.2",
   "reportlab==4.0.4",
-"Markdown==3.4.4"
+  "Markdown==3.4.4"
 ]
 
 [project.optional-dependencies]
