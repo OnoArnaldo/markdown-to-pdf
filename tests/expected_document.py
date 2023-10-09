@@ -1,3 +1,5 @@
+# pylint: disable=all
+
 expected_create_element = (
     '%PDF-1.4\n'
     '%\x93\x8c\x8b\x9e ReportLab Generated PDF document http://www.reportlab.com\n'

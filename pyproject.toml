@@ -1,27 +1,27 @@
 [project]
 name = "markdown-to-pdf"
-version = "2023.07.31.0004"
+version = "2023.10.09.0001"
 description = "Convert markdown document to pdf"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {file = "LICENSE"}
+license = { file = "LICENSE" }
 keywords = ["markdown", "pdf", "development"]
-authors = [{name = "Arnaldo Ono", email = "git@onoarnaldo.com" }]
-maintainers = [{name = "Arnaldo Ono", email = "git@onoarnaldo.com" }]
+authors = [{ name = "Arnaldo Ono", email = "git@onoarnaldo.com" }]
+maintainers = [{ name = "Arnaldo Ono", email = "git@onoarnaldo.com" }]
 
 classifiers = [
-  "Development Status :: 3 - Alpha",
-  "Intended Audience :: Developers",
-  "Topic :: Software Development :: Build Tools",
-  "License :: OSI Approved :: MIT License",
-  "Programming Language :: Python :: 3.11",
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Build Tools",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.11",
 ]
 
 dependencies = [
-  "html-to-json @ git+https://github.com/OnoArnaldo/py-html-to-json.git@0862bd811e12a899c5301555ce6f3874ba507c12",
-  "Jinja2==3.1.2",
-  "reportlab==4.0.4",
-  "Markdown==3.4.4"
+    "html-to-json @ git+https://github.com/OnoArnaldo/py-html-to-json.git@0862bd811e12a899c5301555ce6f3874ba507c12",
+    "Jinja2==3.1.2",
+    "reportlab==4.0.5",
+    "Markdown==3.5"
 ]
 
 [project.optional-dependencies]
@@ -33,3 +33,31 @@ test = ["pytest", "coverage"]
 
 #[project.scripts]
 #sample = "sample:main"
+
+[tool.pylint.MAIN]
+init-hook = "import sys; sys.path.append('./venv/lib/python3.11/site-packages/'); sys.path.append('./src')"
+
+[tool.pylint.'MESSAGES CONTROL']
+disable = ["raw-checker-failed",
+    "bad-inline-option",
+    "locally-disabled",
+    "file-ignored",
+    "suppressed-message",
+    "useless-suppression",
+    "deprecated-pragma",
+    "use-symbolic-message-instead",
+    "use-implicit-booleaness-not-comparison-to-string",
+    "use-implicit-booleaness-not-comparison-to-zero",
+    "missing-module-docstring",
+    "missing-function-docstring",
+    "missing-class-docstring",
+    "too-few-public-methods"]
+
+[tool.pylint.FORMAT]
+max-line-length=121
+
+
+[tool.black]
+line-length = 121
+target-version = ['py310', 'py311']
+skip-string-normalization = true

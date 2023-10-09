@@ -4,9 +4,7 @@ import tomllib
 from collections import UserDict
 from reportlab.lib.enums import TA_JUSTIFY, TA_CENTER, TA_LEFT, TA_RIGHT
 
-__all__ = ('load_config', 'loads_config', 'camel_case_dict',
-           'Style', 'Font', 'ReportAttribute',
-           'Report', 'Config')
+__all__ = ('load_config', 'loads_config', 'camel_case_dict', 'Style', 'Font', 'ReportAttribute', 'Report', 'Config')
 
 
 RE_CAMEL_CASE = re.compile(r'_[a-z]')
@@ -19,9 +17,11 @@ def camel_case_key(key: str) -> str:
 
 
 def camel_case_dict(data: UserDict) -> dict:
-    return {camel_case_key(k): getattr(data, k)
-            for k, v in vars(data.__class__).items()
-            if isinstance(v, property) and getattr(data, k) is not None}
+    return {
+        camel_case_key(k): getattr(data, k)
+        for k, v in vars(data.__class__).items()
+        if isinstance(v, property) and getattr(data, k) is not None
+    }
 
 
 class Style(UserDict):

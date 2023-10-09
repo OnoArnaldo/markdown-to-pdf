@@ -1,5 +1,5 @@
 html-to-json @ git+https://github.com/OnoArnaldo/py-html-to-json.git@d685b81eb965f42cb3f4886b3ffd805212ee4c35
 Jinja2==3.1.2
-Markdown==3.4.4
+Markdown==3.5
 pytest==7.4.2
 reportlab==4.0.5

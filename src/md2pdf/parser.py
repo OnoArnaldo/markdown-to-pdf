@@ -15,10 +15,7 @@ class Readable(_.Protocol):
 
 
 def build_env(loader: BaseLoader) -> Environment:
-    env = Environment(loader=loader,
-                      autoescape=select_autoescape(('html', 'xml')),
-                      trim_blocks=True,
-                      lstrip_blocks=True)
+    env = Environment(loader=loader, autoescape=select_autoescape(('html', 'xml')), trim_blocks=True, lstrip_blocks=True)
     env.globals['today'] = today_long
     env.globals['space'] = append_space
     env.globals['underscore'] = underscore

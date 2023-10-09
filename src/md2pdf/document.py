@@ -20,7 +20,7 @@ if _.TYPE_CHECKING:  # pragma: no cover
     from .config import Config
 
 
-__all__ = (TA_JUSTIFY, TA_CENTER, TA_LEFT, TA_RIGHT, 'PdfGenerator', 'Md2Pdf')
+__all__ = ('TA_JUSTIFY', 'TA_CENTER', 'TA_LEFT', 'TA_RIGHT', 'PdfGenerator', 'Md2Pdf')
 
 
 class Writable(_.Protocol):
@@ -42,13 +42,15 @@ class PdfGenerator:
         self.keep_together: list[Flowable] = []
 
     # region BUILDERS
-    def build_paragraph(self,
-                        text: str = None,
-                        style: str = 'Body',
-                        bullet_text: str = None,
-                        frags: list = None,
-                        case_sensitive: int = 1,
-                        encoding: str = 'utf8') -> Paragraph:
+    def build_paragraph(
+        self,
+        text: str = None,
+        style: str = 'Body',
+        bullet_text: str = None,
+        frags: list = None,
+        case_sensitive: int = 1,
+        encoding: str = 'utf8',
+    ) -> Paragraph:
         return Paragraph(text, self.styles[style], bullet_text, frags, case_sensitive, encoding)
 
     def build_spacer(self, width: int, height: int, is_glue: bool = False) -> Spacer:
@@ -73,22 +75,22 @@ class PdfGenerator:
 
         return self
 
-    def add_font_family(self, name: str,
-                        regular_path: Path | str,
-                        italic_path: Path | str,
-                        bold_path: Path | str,
-                        bold_italic_path: Path | str) -> _.Self:
-
+    def add_font_family(
+        self,
+        name: str,
+        regular_path: Path | str,
+        italic_path: Path | str,
+        bold_path: Path | str,
+        bold_italic_path: Path | str,
+    ) -> _.Self:
         self.add_font(name, regular_path, raise_error=True)
         self.add_font(f'{name}-Italic', italic_path, raise_error=False)
         self.add_font(f'{name}-Bold', bold_path, raise_error=False)
         self.add_font(f'{name}-BoldItalic', bold_italic_path, raise_error=False)
 
-        pdfmetrics.registerFontFamily(name,
-                                      normal=name,
-                                      bold=f'{name}-Bold',
-                                      italic=f'{name}-Italic',
-                                      boldItalic=f'{name}-BoldItalic')
+        pdfmetrics.registerFontFamily(
+            name, normal=name, bold=f'{name}-Bold', italic=f'{name}-Italic', boldItalic=f'{name}-BoldItalic'
+        )
 
         return self
 
@@ -106,24 +108,24 @@ class PdfGenerator:
     def append_element(self, element: Flowable, keep_together: bool = False) -> None:
         if keep_together:
             self.keep_together.append(element)
-        elif len(self.keep_together):
+        elif len(self.keep_together) != 0:
             self.keep_together.append(element)
-            self.elements.append(
-                self.build_keep_together(self.keep_together)
-            )
+            self.elements.append(self.build_keep_together(self.keep_together))
 
             self.keep_together = []
         else:
             self.elements.append(element)
 
-    def append_paragraph(self,
-                         text: str = None,
-                         style: str = 'Body',
-                         bullet_text: str = None,
-                         frags: list = None,
-                         case_sensitive: int = 1,
-                         encoding: str = 'utf8',
-                         keep_together: bool = False) -> _.Self:
+    def append_paragraph(
+        self,
+        text: str = None,
+        style: str = 'Body',
+        bullet_text: str = None,
+        frags: list = None,
+        case_sensitive: int = 1,
+        encoding: str = 'utf8',
+        keep_together: bool = False,
+    ) -> _.Self:
         paragraph = self.build_paragraph(text, style, bullet_text, frags, case_sensitive, encoding)
 
         self.append_element(paragraph, keep_together)
@@ -135,16 +137,17 @@ class PdfGenerator:
         self.append_element(spacer, keep_together)
         return self
 
-    def append_three_columns_paragraph(self,
-                                       texts: _.Iterable[str],
-                                       size: int,
-                                       style: str,
-                                       bullet_text: bool = None,
-                                       frags: list = None,
-                                       case_sensitive: int = 1,
-                                       encoding: str = 'utf8',
-                                       keep_together: bool = False
-                                       ) -> _.Self:
+    def append_three_columns_paragraph(
+        self,
+        texts: _.Iterable[str],
+        size: int,
+        style: str,
+        bullet_text: bool = None,
+        frags: list = None,
+        case_sensitive: int = 1,
+        encoding: str = 'utf8',
+        keep_together: bool = False,
+    ) -> _.Self:
         left, center, right = texts
         center_size = len(center)
         left_size, remainder = divmod(size - center_size, 2)
@@ -153,11 +156,9 @@ class PdfGenerator:
 
         return self.append_paragraph(text, style, bullet_text, frags, case_sensitive, encoding, keep_together)
 
-    def append_bullet_list(self,
-                           values: list[str],
-                           style: str,
-                           bullet_type: str = 'bullet',
-                           keep_together: bool = False) -> _.Self:
+    def append_bullet_list(
+        self, values: list[str], style: str, bullet_type: str = 'bullet', keep_together: bool = False
+    ) -> _.Self:
         bullet_list = self.build_list(values, style, bullet_type)
 
         self.append_element(bullet_list, keep_together)
@@ -166,20 +167,26 @@ class PdfGenerator:
 
     # endregion
 
-    def build(self, file_name: str | Path | Writable, *,
-              title: str = '',
-              author: str = '',
-              subject: str = '',
-              keywords: _.Iterable[str] = None,
-              creator: str = '',
-              **kwargs) -> None:
-        doc = SimpleDocTemplate(file_name,
-                                pagesize=A4,
-                                rightMargin=20 * mm,
-                                leftMargin=20 * mm,
-                                topMargin=20 * mm,
-                                bottomMargin=20 * mm,
-                                **kwargs)
+    def build(
+        self,
+        file_name: str | Path | Writable,
+        *,
+        title: str = '',
+        author: str = '',
+        subject: str = '',
+        keywords: _.Iterable[str] = None,
+        creator: str = '',
+        **kwargs,
+    ) -> None:
+        doc = SimpleDocTemplate(
+            file_name,
+            pagesize=A4,
+            rightMargin=20 * mm,
+            leftMargin=20 * mm,
+            topMargin=20 * mm,
+            bottomMargin=20 * mm,
+            **kwargs,
+        )
 
         doc.title = title
         doc.author = author
@@ -200,13 +207,14 @@ class PdfGenerator:
         if isinstance(file_name, Path):
             file_name = str(file_name)
 
-        self.build(file_name,
-                   title=meta.get('title', ''),
-                   author=name,
-                   creator=name,
-                   subject=f'version="{version}"',
-                   keywords=meta.get('keywords', []),
-                   )
+        self.build(
+            file_name,
+            title=meta.get('title', ''),
+            author=name,
+            creator=name,
+            subject=f'version="{version}"',
+            keywords=meta.get('keywords', []),
+        )
 
 
 class Md2Pdf(PdfGenerator):
@@ -223,11 +231,13 @@ class Md2Pdf(PdfGenerator):
         self.root_dir = Path(root_dir or '.')
 
         for font in self.config.fonts:
-            self.add_font_family(font.name,
-                                 self.root_dir / font.regular,
-                                 self.root_dir / font.italic,
-                                 self.root_dir / font.bold,
-                                 self.root_dir / font.bold_italic)
+            self.add_font_family(
+                font.name,
+                self.root_dir / font.regular,
+                self.root_dir / font.italic,
+                self.root_dir / font.bold,
+                self.root_dir / font.bold_italic,
+            )
 
         default = self.config.defaults.style
         for style in self.config.styles:
@@ -292,17 +302,17 @@ class Md2Pdf(PdfGenerator):
 
             if child.get('tag') in {f'h{i}' for i in range(1, 7)} | {'p'}:
                 if '3-columns' in classes:
-                    self.append_three_columns_paragraph(child.get('value', '').split('#'),
-                                                        size=int(self._get_elem_attr(child, 'size', 0)),
-                                                        style=config.get('style'),
-                                                        keep_together='keep-together' in classes)
+                    self.append_three_columns_paragraph(
+                        child.get('value', '').split('#'),
+                        size=int(self._get_elem_attr(child, 'size', 0)),
+                        style=config.get('style'),
+                        keep_together='keep-together' in classes,
+                    )
                 else:
                     key_styles = child.get('attributes', {}).get('style', '')
                     value = self._make_key_value(child.get('value', ''), classes, key_styles)
 
-                    self.append_paragraph(value,
-                                          style=config.get('style'),
-                                          keep_together='keep-together' in classes)
+                    self.append_paragraph(value, style=config.get('style'), keep_together='keep-together' in classes)
 
             elif child.get('tag') in {'ul'}:
                 if len(items := child.get('children', [])):
@@ -312,14 +322,11 @@ class Md2Pdf(PdfGenerator):
                     list_classes = []
                     key_styles = ''
 
-                values = [self._make_key_value(c.get('value', ''), list_classes, key_styles)
-                          for c in child.get('children', [])]
+                values = [
+                    self._make_key_value(c.get('value', ''), list_classes, key_styles) for c in child.get('children', [])
+                ]
 
-                self.append_bullet_list(
-                    values,
-                    style=config.get('style'),
-                    keep_together='keep-together' in classes
-                )
+                self.append_bullet_list(values, style=config.get('style'), keep_together='keep-together' in classes)
 
         return self
 
@@ -335,7 +342,7 @@ class Md2Pdf(PdfGenerator):
         return self.build_from_html(text, **kwargs)
 
     def build_from_file(self, md_file: str | Path) -> _.Self:
-        with Path(md_file).open() as f:
+        with Path(md_file).open(encoding='utf8') as f:
             text, kwargs = self.md_parser.from_file(f)
 
         return self.build_from_html(text, **kwargs)

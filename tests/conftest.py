@@ -1,6 +1,5 @@
-import pytest
-
 from pathlib import Path
+import pytest
 from reportlab.pdfbase import pdfdoc
 
 ROOT_DIR = Path(__file__).parent.absolute()
@@ -15,8 +14,10 @@ class FakePDFDate(pdfdoc.PDFDate):
 
 class FakePDFDocument(pdfdoc.PDFDocument):
     def ID(self):
-        self._ID = (b'\n[<165a2d52ed32fb7e44a66e469053d6cc><165a2d52ed32fb7e44a66e469053d6cc>]\n'
-                    b'% ReportLab generated PDF document -- digest (http://www.reportlab.com)\n')
+        self._ID = (
+            b'\n[<165a2d52ed32fb7e44a66e469053d6cc><165a2d52ed32fb7e44a66e469053d6cc>]\n'
+            b'% ReportLab generated PDF document -- digest (http://www.reportlab.com)\n'
+        )
         return self._ID
 
 

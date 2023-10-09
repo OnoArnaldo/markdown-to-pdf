@@ -1,3 +1,4 @@
+# pylint: disable=redefined-outer-name
 from pathlib import Path
 
 import pytest
@@ -90,12 +91,14 @@ def test_generate(config):
         ExpectedParagraph('The subtitle', 'Doc1 subtitle'),
         ExpectedParagraph('The paragraph:', 'Doc1 Body'),
         ExpectedList(['item 1', 'item 2', 'item 3'], 'bullet'),
-        ExpectedParagraph('Formatted: <u>underscore</u>, <i>italic</i>, '
-                          '<b>bold</b>, <b><i>bold-italic</i></b>, '
-                          '<i><b>italic-bold</b></i>', 'Doc1 Body'),
+        ExpectedParagraph(
+            'Formatted: <u>underscore</u>, <i>italic</i>, '
+            '<b>bold</b>, <b><i>bold-italic</i></b>, '
+            '<i><b>italic-bold</b></i>',
+            'Doc1 Body',
+        ),
         ExpectedParagraph('<u><b><i>key:</i></b></u> value', 'Doc1 Body'),
-        ExpectedList(['<b>item1:</b> value1', '<b>item2:</b> value2', '<b>item3:</b> value3'],
-                     'bullet')
+        ExpectedList(['<b>item1:</b> value1', '<b>item2:</b> value2', '<b>item3:</b> value3'], 'bullet'),
     ]
 
 

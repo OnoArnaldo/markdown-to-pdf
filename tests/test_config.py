@@ -1,3 +1,4 @@
+# pylint: disable=redefined-outer-name
 from pathlib import Path
 
 import pytest
@@ -21,9 +22,7 @@ def test_config_empty():
     assert config.data == {}
 
 
-@pytest.mark.parametrize('idx,name,font_name',
-                         ([0, 'Doc1Font', 'OpenSans'],
-                          [1, 'Doc2Font', 'UbuntuMono']))
+@pytest.mark.parametrize('idx,name,font_name', ([0, 'Doc1Font', 'OpenSans'], [1, 'Doc2Font', 'UbuntuMono']))
 def test_config_fonts(config, idx, name, font_name):
     assert len(config.fonts) == 2
 
@@ -35,30 +34,57 @@ def test_config_fonts(config, idx, name, font_name):
     assert font.bold_italic == f'./tests/fonts/{font_name}/{font_name}-BoldItalic.ttf'
 
 
-@pytest.mark.parametrize('idx,name,parms',
-                         [(0, 'Doc1 Title', [('font_name', 'Doc1Font-Bold'),
-                                             ('font_size', 16),
-                                             ('space_before', 0),
-                                             ('space_after', 20),
-                                             ('alignment', document.TA_LEFT)]),
-                          (1, 'Doc1 subtitle', [('font_name', 'Doc1Font-Bold'),
-                                                ('font_size', 12),
-                                                ('space_before', 0),
-                                                ('space_after', 10),
-                                                ('alignment', document.TA_LEFT)]),
-                          (2, 'Doc1 Body', [('font_name', 'Doc1Font')]),
-                          (3, 'Doc2 Title', [('font_name', 'Doc2Font-Bold'),
-                                             ('font_size', 16),
-                                             ('space_before', 0),
-                                             ('space_after', 20),
-                                             ('alignment', document.TA_LEFT)]),
-                          (4, 'Doc2 subtitle', [('font_name', 'Doc2Font-BoldItalic'),
-                                                ('font_size', 12),
-                                                ('space_before', 0),
-                                                ('space_after', 10),
-                                                ('alignment', document.TA_LEFT)]),
-                          (5, 'Doc2 Body', [('font_name', 'Doc2Font')]),
-                          ])
+@pytest.mark.parametrize(
+    'idx,name,parms',
+    [
+        (
+            0,
+            'Doc1 Title',
+            [
+                ('font_name', 'Doc1Font-Bold'),
+                ('font_size', 16),
+                ('space_before', 0),
+                ('space_after', 20),
+                ('alignment', document.TA_LEFT),
+            ],
+        ),
+        (
+            1,
+            'Doc1 subtitle',
+            [
+                ('font_name', 'Doc1Font-Bold'),
+                ('font_size', 12),
+                ('space_before', 0),
+                ('space_after', 10),
+                ('alignment', document.TA_LEFT),
+            ],
+        ),
+        (2, 'Doc1 Body', [('font_name', 'Doc1Font')]),
+        (
+            3,
+            'Doc2 Title',
+            [
+                ('font_name', 'Doc2Font-Bold'),
+                ('font_size', 16),
+                ('space_before', 0),
+                ('space_after', 20),
+                ('alignment', document.TA_LEFT),
+            ],
+        ),
+        (
+            4,
+            'Doc2 subtitle',
+            [
+                ('font_name', 'Doc2Font-BoldItalic'),
+                ('font_size', 12),
+                ('space_before', 0),
+                ('space_after', 10),
+                ('alignment', document.TA_LEFT),
+            ],
+        ),
+        (5, 'Doc2 Body', [('font_name', 'Doc2Font')]),
+    ],
+)
 def test_config_styles(config, idx, name, parms):
     assert len(config.styles) == 6
 
@@ -70,12 +96,15 @@ def test_config_styles(config, idx, name, parms):
         assert style.strike_width is None
 
 
-@pytest.mark.parametrize('idx,style,attrs', [
-    (0, 'Doc2 Title', [('id', 'title2')]),
-    (1, 'Doc2 subtitle', [('id', 'subtitle2')]),
-    (2, 'Doc1 Title', [('id', 'title')]),
-    (3, 'Doc1 subtitle', [('tag', 'h2'), ('class', 'subtitle')]),
-])
+@pytest.mark.parametrize(
+    'idx,style,attrs',
+    [
+        (0, 'Doc2 Title', [('id', 'title2')]),
+        (1, 'Doc2 subtitle', [('id', 'subtitle2')]),
+        (2, 'Doc1 Title', [('id', 'title')]),
+        (3, 'Doc1 subtitle', [('tag', 'h2'), ('class', 'subtitle')]),
+    ],
+)
 def test_config_reports(config, idx, style, attrs):
     assert len(config.reports) == 4
 
@@ -89,13 +118,16 @@ def test_config_reports(config, idx, style, attrs):
         assert attr.value == value
 
 
-@pytest.mark.parametrize('key,value', [
-    ('font_size', 10),
-    ('alignment', 'TA_JUSTIFY'),
-    ('allow_widows', 0),
-    ('space_before', 10),
-    ('space_after', 10),
-])
+@pytest.mark.parametrize(
+    'key,value',
+    [
+        ('font_size', 10),
+        ('alignment', 'TA_JUSTIFY'),
+        ('allow_widows', 0),
+        ('space_before', 10),
+        ('space_after', 10),
+    ],
+)
 def test_config_defaults_style(config, key, value):
     style = config.defaults.style
 
