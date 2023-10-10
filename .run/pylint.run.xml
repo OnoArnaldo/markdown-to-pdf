@@ -1,6 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="pylint" type="ShConfigurationType">
-    <option name="SCRIPT_TEXT" value="$USER_HOME$/PycharmProjects/public/venv312/bin/pylint &quot;--msg-template='{abspath}:{line:5d},{column:2d}: {msg} ({symbol})'&quot; --output-format=colorized &quot;pyservices&quot;" />
+    <option name="SCRIPT_TEXT" value="$USER_HOME$/PycharmProjects/public/venv312/bin/pylint &quot;--msg-template='{abspath}:{line:5d},{column:2d}: {msg} ({symbol})'&quot; --output-format=colorized tests src" />
     <option name="INDEPENDENT_SCRIPT_PATH" value="true" />
     <option name="SCRIPT_PATH" value="" />
     <option name="SCRIPT_OPTIONS" value="" />
@@ -9,7 +9,7 @@
     <option name="INDEPENDENT_INTERPRETER_PATH" value="true" />
     <option name="INTERPRETER_PATH" value="/bin/zsh" />
     <option name="INTERPRETER_OPTIONS" value="" />
-    <option name="EXECUTE_IN_TERMINAL" value="true" />
+    <option name="EXECUTE_IN_TERMINAL" value="false" />
     <option name="EXECUTE_SCRIPT_FILE" value="false" />
     <envs />
     <method v="2" />

@@ -18,7 +18,7 @@ classifiers = [
 ]
 
 dependencies = [
-    "html-to-json @ git+https://github.com/OnoArnaldo/py-html-to-json.git@0862bd811e12a899c5301555ce6f3874ba507c12",
+    "html-to-json @ git+https://github.com/OnoArnaldo/py-html-to-json.git@b43981f0d8cede130b3d590479359c902821f91f",
     "Jinja2==3.1.2",
     "reportlab==4.0.5",
     "Markdown==3.5"
