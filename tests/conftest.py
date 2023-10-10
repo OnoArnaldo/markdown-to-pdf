@@ -1,3 +1,4 @@
+import typing as _
 from pathlib import Path
 import pytest
 from reportlab.pdfbase import pdfdoc
@@ -30,7 +31,7 @@ class FakeOutputFile:
 
 
 @pytest.fixture
-def output() -> FakeOutputFile:
+def output() -> _.Generator[FakeOutputFile, None, None]:
     orig = pdfdoc.PDFDate
     orig_doc = pdfdoc.PDFDocument
 

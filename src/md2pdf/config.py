@@ -31,27 +31,27 @@ class Style(UserDict):
 
     @property
     def font_name(self) -> str:
-        return self.get('font_name')
+        return self.get('font_name', '')
 
     @property
     def font_size(self) -> str:
-        return self.get('font_size')
+        return self.get('font_size', '')
 
     @property
     def leading(self) -> str:
-        return self.get('leading')
+        return self.get('leading', '')
 
     @property
     def left_indent(self) -> str:
-        return self.get('left_indent')
+        return self.get('left_indent', '')
 
     @property
     def right_indent(self) -> str:
-        return self.get('right_indent')
+        return self.get('right_indent', '')
 
     @property
     def first_line_indent(self) -> str:
-        return self.get('first_line_indent')
+        return self.get('first_line_indent', '')
 
     @property
     def alignment(self) -> str:
@@ -64,140 +64,141 @@ class Style(UserDict):
                 return TA_RIGHT
             case 'TA_JUSTIFY':
                 return TA_JUSTIFY
+        return ''
 
     @property
     def space_before(self) -> str:
-        return self.get('space_before')
+        return self.get('space_before', '')
 
     @property
     def space_after(self) -> str:
-        return self.get('space_after')
+        return self.get('space_after', '')
 
     @property
     def bullet_font_name(self) -> str:
-        return self.get('bullet_font_name')
+        return self.get('bullet_font_name', '')
 
     @property
     def bullet_font_size(self) -> str:
-        return self.get('bullet_font_size')
+        return self.get('bullet_font_size', '')
 
     @property
     def bullet_indent(self) -> str:
-        return self.get('bullet_indent')
+        return self.get('bullet_indent', '')
 
     @property
     def text_color(self) -> str:
-        return self.get('text_color')
+        return self.get('text_color', '')
 
     @property
     def back_color(self) -> str:
-        return self.get('back_color')
+        return self.get('back_color', '')
 
     @property
     def word_wrap(self) -> str:
-        return self.get('word_wrap')
+        return self.get('word_wrap', '')
 
     @property
     def border_width(self) -> str:
-        return self.get('border_width')
+        return self.get('border_width', '')
 
     @property
     def border_padding(self) -> str:
-        return self.get('border_padding')
+        return self.get('border_padding', '')
 
     @property
     def border_color(self) -> str:
-        return self.get('border_color')
+        return self.get('border_color', '')
 
     @property
     def border_radius(self) -> str:
-        return self.get('border_radius')
+        return self.get('border_radius', '')
 
     @property
     def allow_widows(self) -> str:
-        return self.get('allow_widows')
+        return self.get('allow_widows', '')
 
     @property
     def allow_orphans(self) -> str:
-        return self.get('allow_orphans')
+        return self.get('allow_orphans', '')
 
     @property
     def text_transform(self) -> str:
-        return self.get('text_transform')
+        return self.get('text_transform', '')
 
     @property
     def end_dots(self) -> str:
-        return self.get('end_dots')
+        return self.get('end_dots', '')
 
     @property
     def split_long_words(self) -> str:
-        return self.get('split_long_words')
+        return self.get('split_long_words', '')
 
     @property
     def underline_width(self) -> str:
-        return self.get('underline_width')
+        return self.get('underline_width', '')
 
     @property
     def bullet_anchor(self) -> str:
-        return self.get('bullet_anchor')
+        return self.get('bullet_anchor', '')
 
     @property
     def justify_last_line(self) -> str:
-        return self.get('justify_last_line')
+        return self.get('justify_last_line', '')
 
     @property
     def justify_breaks(self) -> str:
-        return self.get('justify_breaks')
+        return self.get('justify_breaks', '')
 
     @property
     def space_shrinkage(self) -> str:
-        return self.get('space_shrinkage')
+        return self.get('space_shrinkage', '')
 
     @property
     def strike_width(self) -> int:
-        return self.get('strike_width')
+        return self.get('strike_width', 0)
 
     @property
     def underline_offset(self) -> str:
-        return self.get('underline_offset')
+        return self.get('underline_offset', '')
 
     @property
     def underline_gap(self) -> str:
-        return self.get('underline_gap')
+        return self.get('underline_gap', '')
 
     @property
     def strike_offset(self) -> str:
-        return self.get('strike_offset')
+        return self.get('strike_offset', '')
 
     @property
     def strike_gap(self) -> str:
-        return self.get('strike_gap')
+        return self.get('strike_gap', '')
 
     @property
     def link_underline(self) -> str:
-        return self.get('link_underline')
+        return self.get('link_underline', '')
 
     @property
     def hyphenation_lang(self) -> str:
-        return self.get('hyphenation_lang')
+        return self.get('hyphenation_lang', '')
 
     @property
     def uri_waste_reduce(self) -> int:
-        return self.get('uri_waste_reduce')
+        return self.get('uri_waste_reduce', '')
 
     @property
     def embedded_hyphenation(self) -> str:
-        return self.get('embedded_hyphenation')
+        return self.get('embedded_hyphenation', '')
 
 
 class Font(UserDict):
     @property
     def name(self) -> str:
-        return self.get('name')
+        return self.get('name', '')
 
     @property
     def regular(self) -> str:
-        return self.get('regular')
+        return self.get('regular', '')
 
     @property
     def bold(self):
@@ -270,4 +271,6 @@ def load_config(file: FileLike) -> Config:
 
 
 def loads_config(config: str | bytes) -> Config:
+    if isinstance(config, bytes):
+        config = config.decode()
     return Config(tomllib.loads(config))

@@ -93,7 +93,7 @@ def test_config_styles(config, idx, name, parms):
 
     for key, value in parms:
         assert getattr(style, key) == value
-        assert style.strike_width is None
+        assert style.strike_width == 0
 
 
 @pytest.mark.parametrize(

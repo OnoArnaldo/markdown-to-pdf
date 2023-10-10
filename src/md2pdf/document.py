@@ -17,7 +17,7 @@ from .parser import HtmlParser, MarkdownParser
 from .utils import SPACE
 
 if _.TYPE_CHECKING:  # pragma: no cover
-    from .config import Config
+    from .config import Config, Report
 
 
 __all__ = ('TA_JUSTIFY', 'TA_CENTER', 'TA_LEFT', 'TA_RIGHT', 'PdfGenerator', 'Md2Pdf')
@@ -44,9 +44,9 @@ class PdfGenerator:
     # region BUILDERS
     def build_paragraph(
         self,
-        text: str = None,
+        text: _.Optional[str] = None,
         style: str = 'Body',
-        bullet_text: str = None,
+        bullet_text: bool = None,
         frags: list = None,
         case_sensitive: int = 1,
         encoding: str = 'utf8',
@@ -120,7 +120,7 @@ class PdfGenerator:
         self,
         text: str = None,
         style: str = 'Body',
-        bullet_text: str = None,
+        bullet_text: bool = None,
         frags: list = None,
         case_sensitive: int = 1,
         encoding: str = 'utf8',
@@ -169,7 +169,7 @@ class PdfGenerator:
 
     def build(
         self,
-        file_name: str | Path | Writable,
+        file_name: str | Writable,
         *,
         title: str = '',
         author: str = '',
@@ -204,11 +204,14 @@ class PdfGenerator:
         name = meta.get('name', '')
         version = meta.get('version', '')
 
+        the_file_name: Writable | str
         if isinstance(file_name, Path):
-            file_name = str(file_name)
+            the_file_name = str(file_name)
+        else:
+            the_file_name = file_name
 
         self.build(
-            file_name,
+            the_file_name,
             title=meta.get('title', ''),
             author=name,
             creator=name,
@@ -221,12 +224,12 @@ class Md2Pdf(PdfGenerator):
     def __init__(self) -> None:
         super().__init__()
 
-        self.config: 'Config | None' = None
+        self.config: Config  # | None = None
         self.root_dir: Path | str | None = None
         self.html_parser = HtmlParser()
         self.md_parser = MarkdownParser()
 
-    def setup(self, config: 'Config', root_dir: Path | str = None) -> _.Self:
+    def setup(self, config: 'Config', root_dir: Path | str | None = None) -> _.Self:
         self.config = config
         self.root_dir = Path(root_dir or '.')
 
@@ -252,7 +255,7 @@ class Md2Pdf(PdfGenerator):
         return element['attributes'].get(name, default or EMPTY)
 
     def _find_report_config(self, element: dict) -> dict:
-        ret = None
+        ret: Report | dict = {}
 
         for report in self.config.reports:
             if all(self._get_elem_attr(element, a['name']) == a['value'] for a in report.attributes):
@@ -305,14 +308,14 @@ class Md2Pdf(PdfGenerator):
                     self.append_three_columns_paragraph(
                         child.get('value', '').split('#'),
                         size=int(self._get_elem_attr(child, 'size', 0)),
-                        style=config.get('style'),
+                        style=config.get('style', ''),
                         keep_together='keep-together' in classes,
                     )
                 else:
                     key_styles = child.get('attributes', {}).get('style', '')
                     value = self._make_key_value(child.get('value', ''), classes, key_styles)
 
-                    self.append_paragraph(value, style=config.get('style'), keep_together='keep-together' in classes)
+                    self.append_paragraph(value, style=config.get('style', ''), keep_together='keep-together' in classes)
 
             elif child.get('tag') in {'ul'}:
                 if len(items := child.get('children', [])):
@@ -326,7 +329,7 @@ class Md2Pdf(PdfGenerator):
                     self._make_key_value(c.get('value', ''), list_classes, key_styles) for c in child.get('children', [])
                 ]
 
-                self.append_bullet_list(values, style=config.get('style'), keep_together='keep-together' in classes)
+                self.append_bullet_list(values, style=config.get('style', ''), keep_together='keep-together' in classes)
 
         return self
 

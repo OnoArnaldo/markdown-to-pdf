@@ -61,3 +61,7 @@ max-line-length=121
 line-length = 121
 target-version = ['py310', 'py311']
 skip-string-normalization = true
+
+
+[tool.mypy]
+implicit_optional = true
